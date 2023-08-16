@@ -32,10 +32,11 @@ def my_train(agent, opponent="random", num_episodes=None, process_state=None, pr
 def my_evaluate(environment, agents, _num_episodes=100):
     e = make(environment)
     _rewards = [[] for i in range(_num_episodes)]
-    for i in tqdm(range(_num_episodes)):
+    tq_bar = tqdm(range(_num_episodes))
+    for i in tq_bar:
         last_state = e.run(agents)[-1]
         _rewards[i] = [_state.reward for _state in last_state]
-    return _rewards
+    return _rewards, tq_bar.format_dict["elapsed"]
 
 
 def my_evaluate_parallel(environment, kaggle_agents, agent, _num_episodes=100, batch_size=256):
@@ -68,7 +69,7 @@ def my_evaluate_parallel(environment, kaggle_agents, agent, _num_episodes=100, b
             observations = np.append(observations, [trainer.reset() for trainer in new_trainers])
 
     tq_bar.close()
-    return _rewards
+    return _rewards, tq_bar.format_dict["elapsed"]
 
 
 def mean_reward(_rewards):

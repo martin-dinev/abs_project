@@ -181,9 +181,9 @@ class MyAgent:
     def my_test(self, agent_name, at_episode, _num_episodes=100, opponent_agent=None):
         opponent_agent = opponent_agent if opponent_agent is not None else agent_name
         self.agent.load(self.save_name, at_episode)
-        _rewards = my_evaluate("connectx", [self.kaggle_agent, opponent_agent], _num_episodes=_num_episodes)
+        _rewards, _time = my_evaluate("connectx", [self.kaggle_agent, opponent_agent], _num_episodes=_num_episodes)
         _mean_reward = mean_reward([r[0] for r in _rewards])
-        print(self.save_name + " vs " + agent_name + ":", _mean_reward)
+        print(self.save_name + " vs " + agent_name + ":", _mean_reward, " time: ",_time)
 
     def my_test_parallel(self, agent_name, at_episode="max", _num_episodes=100, opponent_agent=None, batch_size=256):
         opponent_agent = opponent_agent if opponent_agent is not None else agent_name
@@ -194,10 +194,10 @@ class MyAgent:
                 print("No models found for " + self.save_name)
                 return
         self.agent.load(self.save_name, at_episode)
-        _rewards = my_evaluate_parallel("connectx", [self.kaggle_agent, opponent_agent], self,
+        _rewards, _time = my_evaluate_parallel("connectx", [self.kaggle_agent, opponent_agent], self,
                                         _num_episodes=_num_episodes, batch_size=batch_size)
         _mean_reward = mean_reward(_rewards)
-        print(self.save_name + " vs " + agent_name + ":", _mean_reward)
+        print(self.save_name + " vs " + agent_name + ":", _mean_reward, " time:", _time)
 
     def pre_train_steps(self, opponent, num_episodes, epsilon, epsilon_decay, epsilon_min, save_iter, prev_count,
                         update_target_steps, save_name):
